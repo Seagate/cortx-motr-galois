@@ -26,9 +26,6 @@ plank@cs.utk.edu
 
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
 extern int galois_single_multiply(int a, int b, int w);
 extern int galois_single_divide(int a, int b, int w);
 extern int galois_log(int value, int w);
@@ -45,7 +42,7 @@ extern int galois_multtable_divide(int x, int y, int w);
 extern int galois_shift_multiply(int x, int y, int w);
 extern int galois_shift_divide(int x, int y, int w);
 
-extern int galois_create_split_w8_tables();
+extern int galois_create_split_w8_tables(void);
 extern int galois_split_w8_multiply(int x, int y);
 
 extern int galois_inverse(int x, int w);

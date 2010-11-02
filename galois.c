@@ -26,10 +26,22 @@ Knoxville, TN 37996
 plank@cs.utk.edu
 
  */
+#ifdef __KERNEL__
+# include <linux/module.h>
+# include <linux/kernel.h>
+# include <linux/mm.h>
+# include <linux/slab.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+/* quick decision, for now */
+# define malloc(m) kmalloc(m, GFP_KERNEL)
+# define free(m) kfree(m)
+# define exit(m) BUG_ON(m)
+# define fprintf(m, fmt, args...) printk("%s:%d " fmt, __FUNCTION__, __LINE__, ##args)
+#else /* !__KERNEL__ */
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+#endif /* __KERNEL__ */
 
 #include "galois.h"
 
@@ -544,7 +556,8 @@ void galois_w16_region_multiply(char *region,      /* Region to multiply */
 
 void galois_invert_binary_matrix(int *mat, int *inv, int rows)
 {
-  int cols, i, j, k;
+  /* int cols, i, j, k; */
+  int cols, i, j;
   int tmp;
  
   cols = rows;
@@ -599,9 +612,12 @@ int galois_inverse(int y, int w)
 
 int galois_shift_inverse(int y, int w)
 {
-  int mat[1024], mat2[32];
-  int inv[1024], inv2[32];
-  int ind, i, j, k, prod;
+  /* int mat[1024], mat2[32]; */
+  int mat2[32];
+  /* int inv[1024], inv2[32]; */
+  int inv2[32];
+  /* int ind, i, j, k, prod; */
+  int i;
  
   for (i = 0; i < w; i++) {
     mat2[i] = y;
@@ -665,8 +681,8 @@ void galois_w32_region_multiply(char *region,      /* Region to multiply */
                                   char *r2,          /* If r2 != NULL, products go here */
                                   int add)
 {
-  unsigned int *ur1, *ur2, *cp, *ur2top;
-  unsigned long *lp2, *lptop;
+  unsigned int *ur1, *ur2, /* *cp, */ *ur2top;
+  /* unsigned long *lp2, *lptop; */
   int i, j, a, b, accumulator, i8, j8, k;
   int acache[4];
 
@@ -676,7 +692,7 @@ void galois_w32_region_multiply(char *region,      /* Region to multiply */
   ur2top = ur2 + nbytes;
 
   if (galois_split_w8[0]== NULL) {
-    if (galois_create_split_w8_tables(8) < 0) {
+    if (galois_create_split_w8_tables() < 0) {
       fprintf(stderr, "galois_32_region_multiply -- couldn't make split multiplication tables\n");
       exit(1);
     }
