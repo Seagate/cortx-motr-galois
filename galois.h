@@ -31,6 +31,8 @@ extern int galois_single_divide(int a, int b, int w);
 extern int galois_log(int value, int w);
 extern int galois_ilog(int value, int w);
 
+extern void galois_calc_tables_release(void);
+
 extern int galois_create_log_tables(int w);   /* Returns 0 on success, -1 on failure */
 extern int galois_logtable_multiply(int x, int y, int w);
 extern int galois_logtable_divide(int x, int y, int w);

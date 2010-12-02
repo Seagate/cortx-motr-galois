@@ -36,11 +36,14 @@ plank@cs.utk.edu
 # define malloc(m) kmalloc(m, GFP_KERNEL)
 # define free(m) kfree(m)
 # define exit(m) BUG_ON(m)
+
 # define fprintf(m, fmt, args...) printk("%s:%d " fmt, __FUNCTION__, __LINE__, ##args)
+# define GALOIS_EXPORTED(s) EXPORT_SYMBOL(s)
 #else /* !__KERNEL__ */
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# define GALOIS_EXPORTED(s)
 #endif /* __KERNEL__ */
 
 #include "galois.h"
@@ -195,6 +198,7 @@ int galois_create_log_tables(int w)
   galois_ilog_tables[w] += nwm1[w];
   return 0;
 }
+GALOIS_EXPORTED(galois_create_log_tables);
 
 int galois_logtable_multiply(int x, int y, int w)
 {
@@ -207,6 +211,7 @@ int galois_logtable_multiply(int x, int y, int w)
                                    because we replicate the ilog table twice.  */
   return galois_ilog_tables[w][sum_j];
 }
+GALOIS_EXPORTED(galois_logtable_multiply);
 
 int galois_logtable_divide(int x, int y, int w)
 {
@@ -220,6 +225,7 @@ int galois_logtable_divide(int x, int y, int w)
   z = galois_ilog_tables[w][sum_j];
   return z;
 }
+GALOIS_EXPORTED(galois_logtable_divide);
 
 int galois_create_mult_tables(int w)
 {
@@ -271,6 +277,7 @@ int galois_create_mult_tables(int w)
   }
   return 0;
 }
+GALOIS_EXPORTED(galois_create_mult_tables);
 
 int galois_ilog(int value, int w)
 {
@@ -282,6 +289,7 @@ int galois_ilog(int value, int w)
   }
   return galois_ilog_tables[w][value];
 }
+GALOIS_EXPORTED(galois_ilog);
 
 int galois_log(int value, int w)
 {
@@ -293,7 +301,7 @@ int galois_log(int value, int w)
   }
   return galois_log_tables[w][value];
 }
-
+GALOIS_EXPORTED(galois_log);
 
 int galois_shift_multiply(int x, int y, int w)
 {
@@ -324,6 +332,7 @@ int galois_shift_multiply(int x, int y, int w)
   }
   return prod;
 }
+GALOIS_EXPORTED(galois_shift_multiply);
 
 int galois_single_multiply(int x, int y, int w)
 {
@@ -364,11 +373,13 @@ int galois_single_multiply(int x, int y, int w)
   fprintf(stderr, "Galois_single_multiply - no implementation for w=%d\n", w);
   exit(1);
 }
+GALOIS_EXPORTED(galois_single_multiply);
 
 int galois_multtable_multiply(int x, int y, int w)
 {
   return galois_mult_tables[w][(x<<w)|y];
 }
+GALOIS_EXPORTED(galois_multtable_multiply);
 
 int galois_single_divide(int a, int b, int w)
 {
@@ -402,6 +413,7 @@ int galois_single_divide(int a, int b, int w)
   fprintf(stderr, "Galois_single_divide - no implementation for w=%d\n", w);
   exit(1);
 }
+GALOIS_EXPORTED(galois_single_divide);
 
 int galois_shift_divide(int a, int b, int w)
 {
@@ -412,11 +424,13 @@ int galois_shift_divide(int a, int b, int w)
   inverse = galois_shift_inverse(b, w);
   return galois_shift_multiply(a, inverse, w);
 }
+GALOIS_EXPORTED(galois_shift_divide);
 
 int galois_multtable_divide(int x, int y, int w)
 {
   return galois_div_tables[w][(x<<w)|y];
 }
+GALOIS_EXPORTED(galois_multtable_divide);
 
 void galois_w08_region_multiply(char *region,      /* Region to multiply */
                                   int multby,       /* Number to multiply by */
@@ -472,6 +486,7 @@ void galois_w08_region_multiply(char *region,      /* Region to multiply */
   }
   return;
 }
+GALOIS_EXPORTED(galois_w08_region_multiply);
 
 void galois_w16_region_multiply(char *region,      /* Region to multiply */
                                   int multby,       /* Number to multiply by */
@@ -551,6 +566,7 @@ void galois_w16_region_multiply(char *region,      /* Region to multiply */
   }
   return; 
 }
+GALOIS_EXPORTED(galois_w16_region_multiply);
 
 /* This will destroy mat, by the way */
 
@@ -601,6 +617,7 @@ void galois_invert_binary_matrix(int *mat, int *inv, int rows)
     }
   } 
 }
+GALOIS_EXPORTED(galois_invert_binary_matrix);
 
 int galois_inverse(int y, int w)
 {
@@ -609,6 +626,7 @@ int galois_inverse(int y, int w)
   if (mult_type[w] == SHIFT || mult_type[w] == SPLITW8) return galois_shift_inverse(y, w);
   return galois_single_divide(1, y, w);
 }
+GALOIS_EXPORTED(galois_inverse);
 
 int galois_shift_inverse(int y, int w)
 {
@@ -634,6 +652,7 @@ int galois_shift_inverse(int y, int w)
 
   return inv2[0]; 
 }
+GALOIS_EXPORTED(galois_shift_inverse);
 
 int *galois_get_mult_table(int w)
 {
@@ -644,6 +663,7 @@ int *galois_get_mult_table(int w)
   }
   return galois_mult_tables[w];
 }
+GALOIS_EXPORTED(galois_get_mult_table);
 
 int *galois_get_div_table(int w) 
 {
@@ -654,6 +674,7 @@ int *galois_get_div_table(int w)
   }
   return galois_div_tables[w];
 }
+GALOIS_EXPORTED(galois_get_div_table);
 
 int *galois_get_log_table(int w)
 {
@@ -664,6 +685,7 @@ int *galois_get_log_table(int w)
   }
   return galois_log_tables[w];
 }
+GALOIS_EXPORTED(galois_get_log_table);
 
 int *galois_get_ilog_table(int w)
 {
@@ -674,6 +696,7 @@ int *galois_get_ilog_table(int w)
   }
   return galois_ilog_tables[w];
 }
+GALOIS_EXPORTED(galois_get_ilog_table);
 
 void galois_w32_region_multiply(char *region,      /* Region to multiply */
                                   int multby,       /* Number to multiply by */
@@ -738,6 +761,7 @@ void galois_w32_region_multiply(char *region,      /* Region to multiply */
   return;
 
 }
+GALOIS_EXPORTED(galois_w32_region_multiply);
 
 void galois_region_xor(           char *r1,         /* Region 1 */
                                   char *r2,         /* Region 2 */
@@ -763,6 +787,7 @@ void galois_region_xor(           char *r1,         /* Region 1 */
     l3++;
   }
 }
+GALOIS_EXPORTED(galois_region_xor);
 
 int galois_create_split_w8_tables()
 {
@@ -798,6 +823,7 @@ int galois_create_split_w8_tables()
   }
   return 0;
 }
+GALOIS_EXPORTED(galois_create_split_w8_tables);
 
 int galois_split_w8_multiply(int x, int y)
 {
@@ -818,3 +844,20 @@ int galois_split_w8_multiply(int x, int y)
   }
   return accumulator;
 }
+GALOIS_EXPORTED(galois_split_w8_multiply);
+
+void galois_calc_tables_release(void)
+{
+	int i;
+	for (i = 0; i < 33; ++i) {
+		free(galois_log_tables[i]);
+		free(galois_ilog_tables[i]);
+		free(galois_mult_tables[i]);
+		free(galois_div_tables[i]);
+	}
+
+	for (i = 0; i < 8; ++i) {
+		free(galois_split_w8[i]);
+	}
+}
+GALOIS_EXPORTED(galois_calc_tables_release);
