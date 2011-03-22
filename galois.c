@@ -158,16 +158,66 @@ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static int *galois_split_w8[7] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
+/* >> WORKAROUD: Intentions of the author were strange: The library
+   was not designed in order to free data structures allocated by
+   initialization functions, pointers to that allocated data're
+   changing through the source. That's why library's modified.
+   The pointers to allocated data are saved in separate
+   structure and then freed.
+
+   galois_wa prefix is used to identify workaround.
+ */
+enum {
+  GALOIS_WA_MEMLIST_ITEMS_MAX = 32
+};
+
+static void *galois_wa_memlist[GALOIS_WA_MEMLIST_ITEMS_MAX];
+static size_t galois_wa_memit = 0;
+
+static void galois_wa_lib_fini(void)
+{
+  int i;
+  for (i = 0; i < galois_wa_memit; ++i)
+    free(galois_wa_memlist[i]);
+
+  galois_wa_memit = 0;
+
+  for (i = 0; i < 33; ++i) {
+    galois_mult_tables[i] = NULL;
+    galois_div_tables[i] = NULL;
+    galois_ilog_tables[i] = NULL;
+    galois_log_tables[i] = NULL;
+  }
+
+  for (i = 0; i < 7; ++i) {
+    galois_split_w8[i] = NULL;
+  }
+}
+
+static void* galois_wa_lib_alloc(size_t s)
+{
+  void *p = malloc(s);
+  galois_wa_memlist[galois_wa_memit++] = p;
+
+  if (galois_wa_memit >= GALOIS_WA_MEMLIST_ITEMS_MAX) {
+    exit(1);
+  }
+
+  return p;
+}
+
+/* << */
+
 int galois_create_log_tables(int w)
 {
   int j, b;
 
   if (w > 30) return -1;
   if (galois_log_tables[w] != NULL) return 0;
-  galois_log_tables[w] = (int *) malloc(sizeof(int)*nw[w]);
+  galois_log_tables[w] = (int *) galois_wa_lib_alloc(sizeof(int)*nw[w]);
   if (galois_log_tables[w] == NULL) return -1; 
   
-  galois_ilog_tables[w] = (int *) malloc(sizeof(int)*nw[w]*3);
+  galois_ilog_tables[w] = (int *) galois_wa_lib_alloc(sizeof(int)*nw[w]*3);
   if (galois_ilog_tables[w] == NULL) { 
     free(galois_log_tables[w]);
     galois_log_tables[w] = NULL;
@@ -234,10 +284,10 @@ int galois_create_mult_tables(int w)
   if (w >= 14) return -1;
 
   if (galois_mult_tables[w] != NULL) return 0;
-  galois_mult_tables[w] = (int *) malloc(sizeof(int) * nw[w] * nw[w]);
+  galois_mult_tables[w] = (int *) galois_wa_lib_alloc(sizeof(int) * nw[w] * nw[w]);
   if (galois_mult_tables[w] == NULL) return -1;
   
-  galois_div_tables[w] = (int *) malloc(sizeof(int) * nw[w] * nw[w]);
+  galois_div_tables[w] = (int *) galois_wa_lib_alloc(sizeof(int) * nw[w] * nw[w]);
   if (galois_div_tables[w] == NULL) {
     free(galois_mult_tables[w]);
     galois_mult_tables[w] = NULL;
@@ -798,7 +848,7 @@ int galois_create_split_w8_tables()
   if (galois_create_mult_tables(8) < 0) return -1;
 
   for (i = 0; i < 7; i++) {
-    galois_split_w8[i] = (int *) malloc(sizeof(int) * (1 << 16));
+    galois_split_w8[i] = (int *) galois_wa_lib_alloc(sizeof(int) * (1 << 16));
     if (galois_split_w8[i] == NULL) {
       for (i--; i >= 0; i--) free(galois_split_w8[i]);
       return -1;
@@ -848,16 +898,6 @@ GALOIS_EXPORTED(galois_split_w8_multiply);
 
 void galois_calc_tables_release(void)
 {
-	int i;
-	for (i = 0; i < 33; ++i) {
-		free(galois_log_tables[i]);
-		free(galois_ilog_tables[i]);
-		free(galois_mult_tables[i]);
-		free(galois_div_tables[i]);
-	}
-
-	for (i = 0; i < 8; ++i) {
-		free(galois_split_w8[i]);
-	}
+  galois_wa_lib_fini();
 }
 GALOIS_EXPORTED(galois_calc_tables_release);
