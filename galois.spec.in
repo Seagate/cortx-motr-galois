@@ -1,0 +1,28 @@
+Name:    galois
+Version: @VERSION@
+Release: 1
+Summary: Fast Galois Field Arithmetic Library in C/C++
+Group: System Environment/Base
+License: GPL
+Source: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}
+
+%description
+Fast Galois Field Arithmetic Library in C/C++
+
+%prep
+%setup  -q -n %{name}-%{version}
+
+%build
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}}
+make 
+
+%install
+rm -rf $RPM_BUILD_ROOT
+DESTDIR="$RPM_BUILD_ROOT" make install
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS README NEWS ChangeLog COPYING INSTALL doc
+%{_includedir}/*
+%{_libdir}/libgalois*
