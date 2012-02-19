@@ -46,7 +46,7 @@ plank@cs.utk.edu
 # define GALOIS_EXPORTED(s)
 #endif /* __KERNEL__ */
 
-#include "galois.h"
+#include "galois/galois.h"
 
 #define NONE (10)
 #define TABLE (11)

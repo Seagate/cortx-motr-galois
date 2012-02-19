@@ -1,6 +1,6 @@
 AC_PREREQ([2.59])
 AC_INIT([galois], [0.1], [colibri@xyratex.com])
-AC_CONFIG_SRCDIR([galois.c])
+AC_CONFIG_SRCDIR([src/galois.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([galois],[0.1])
 AC_CONFIG_MACRO_DIR([m4])
@@ -18,7 +18,17 @@ AC_CHECK_HEADERS([stdlib.h string.h sys/time.h])
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([gettimeofday])
 
+SRCDIR=$(cd $srcdir && echo $PWD)
+if ! test -d $SRCDIR; then
+	AC_MSG_ERROR([Cannot figure out full path for srcdir!])
+fi
+AC_SUBST([SRCDIR])
+
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([doc/Makefile])
+AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([src/linux_kernel/Makefile])
+AC_CONFIG_FILES([include/Makefile])
+AC_CONFIG_FILES([include/galois/Makefile])
 AC_CONFIG_FILES([galois.spec])
 AC_OUTPUT
