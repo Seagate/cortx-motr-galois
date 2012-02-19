@@ -27,7 +27,9 @@ plank@cs.utk.edu
  */
 
 #include <stdio.h>
-#include "galois.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <galois/galois.h>
 
 main(int argc, char **argv)
 {

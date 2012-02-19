@@ -15,6 +15,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -34,6 +35,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+noinst_PROGRAMS = gf_basic_tester$(EXEEXT) gf_div$(EXEEXT) \
+	gf_ilog$(EXEEXT) gf_inverse$(EXEEXT) gf_log$(EXEEXT) \
+	gf_mult$(EXEEXT) gf_xor$(EXEEXT) gf_xor_tester$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -76,6 +80,31 @@ libgalois_la_OBJECTS = $(am_libgalois_la_OBJECTS)
 libgalois_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libgalois_la_LDFLAGS) $(LDFLAGS) -o $@
+PROGRAMS = $(noinst_PROGRAMS)
+am_gf_basic_tester_OBJECTS = gf_basic_tester.$(OBJEXT)
+gf_basic_tester_OBJECTS = $(am_gf_basic_tester_OBJECTS)
+gf_basic_tester_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_div_OBJECTS = gf_div.$(OBJEXT)
+gf_div_OBJECTS = $(am_gf_div_OBJECTS)
+gf_div_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_ilog_OBJECTS = gf_ilog.$(OBJEXT)
+gf_ilog_OBJECTS = $(am_gf_ilog_OBJECTS)
+gf_ilog_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_inverse_OBJECTS = gf_inverse.$(OBJEXT)
+gf_inverse_OBJECTS = $(am_gf_inverse_OBJECTS)
+gf_inverse_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_log_OBJECTS = gf_log.$(OBJEXT)
+gf_log_OBJECTS = $(am_gf_log_OBJECTS)
+gf_log_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_mult_OBJECTS = gf_mult.$(OBJEXT)
+gf_mult_OBJECTS = $(am_gf_mult_OBJECTS)
+gf_mult_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_xor_OBJECTS = gf_xor.$(OBJEXT)
+gf_xor_OBJECTS = $(am_gf_xor_OBJECTS)
+gf_xor_DEPENDENCIES = $(top_builddir)/src/libgalois.la
+am_gf_xor_tester_OBJECTS = gf_xor_tester.$(OBJEXT)
+gf_xor_tester_OBJECTS = $(am_gf_xor_tester_OBJECTS)
+gf_xor_tester_DEPENDENCIES = $(top_builddir)/src/libgalois.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -89,8 +118,14 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libgalois_la_SOURCES)
-DIST_SOURCES = $(libgalois_la_SOURCES)
+SOURCES = $(libgalois_la_SOURCES) $(gf_basic_tester_SOURCES) \
+	$(gf_div_SOURCES) $(gf_ilog_SOURCES) $(gf_inverse_SOURCES) \
+	$(gf_log_SOURCES) $(gf_mult_SOURCES) $(gf_xor_SOURCES) \
+	$(gf_xor_tester_SOURCES)
+DIST_SOURCES = $(libgalois_la_SOURCES) $(gf_basic_tester_SOURCES) \
+	$(gf_div_SOURCES) $(gf_ilog_SOURCES) $(gf_inverse_SOURCES) \
+	$(gf_log_SOURCES) $(gf_mult_SOURCES) $(gf_xor_SOURCES) \
+	$(gf_xor_tester_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -243,14 +278,35 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = . linux_kernel
+SUBDIRS = linux_kernel
 lib_LTLIBRARIES = libgalois.la
 libgalois_la_SOURCES = galois.c
+libgalois_la_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
 libgalois_la_LDFLAGS = -release 0.1
-EXTRA_DIST = gf_basic_tester.c gf_div.c gf_ilog.c gf_inverse.c \
-                           gf_log.c gf_mult.c gf_xor.c gf_xor_tester.c
-
-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_basic_tester_SOURCES = gf_basic_tester.c
+gf_basic_tester_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_basic_tester_LDADD = $(top_builddir)/src/libgalois.la
+gf_div_SOURCES = gf_div.c
+gf_div_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_div_LDADD = $(top_builddir)/src/libgalois.la
+gf_ilog_SOURCES = gf_ilog.c
+gf_ilog_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_ilog_LDADD = $(top_builddir)/src/libgalois.la
+gf_inverse_SOURCES = gf_inverse.c
+gf_inverse_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_inverse_LDADD = $(top_builddir)/src/libgalois.la
+gf_log_SOURCES = gf_log.c
+gf_log_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_log_LDADD = $(top_builddir)/src/libgalois.la
+gf_mult_SOURCES = gf_mult.c
+gf_mult_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_mult_LDADD = $(top_builddir)/src/libgalois.la
+gf_xor_SOURCES = gf_xor.c
+gf_xor_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_xor_LDADD = $(top_builddir)/src/libgalois.la
+gf_xor_tester_SOURCES = gf_xor_tester.c
+gf_xor_tester_INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/include
+gf_xor_tester_LDADD = $(top_builddir)/src/libgalois.la
 all: all-recursive
 
 .SUFFIXES:
@@ -319,6 +375,39 @@ clean-libLTLIBRARIES:
 libgalois.la: $(libgalois_la_OBJECTS) $(libgalois_la_DEPENDENCIES) 
 	$(libgalois_la_LINK) -rpath $(libdir) $(libgalois_la_OBJECTS) $(libgalois_la_LIBADD) $(LIBS)
 
+clean-noinstPROGRAMS:
+	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+gf_basic_tester$(EXEEXT): $(gf_basic_tester_OBJECTS) $(gf_basic_tester_DEPENDENCIES) 
+	@rm -f gf_basic_tester$(EXEEXT)
+	$(LINK) $(gf_basic_tester_OBJECTS) $(gf_basic_tester_LDADD) $(LIBS)
+gf_div$(EXEEXT): $(gf_div_OBJECTS) $(gf_div_DEPENDENCIES) 
+	@rm -f gf_div$(EXEEXT)
+	$(LINK) $(gf_div_OBJECTS) $(gf_div_LDADD) $(LIBS)
+gf_ilog$(EXEEXT): $(gf_ilog_OBJECTS) $(gf_ilog_DEPENDENCIES) 
+	@rm -f gf_ilog$(EXEEXT)
+	$(LINK) $(gf_ilog_OBJECTS) $(gf_ilog_LDADD) $(LIBS)
+gf_inverse$(EXEEXT): $(gf_inverse_OBJECTS) $(gf_inverse_DEPENDENCIES) 
+	@rm -f gf_inverse$(EXEEXT)
+	$(LINK) $(gf_inverse_OBJECTS) $(gf_inverse_LDADD) $(LIBS)
+gf_log$(EXEEXT): $(gf_log_OBJECTS) $(gf_log_DEPENDENCIES) 
+	@rm -f gf_log$(EXEEXT)
+	$(LINK) $(gf_log_OBJECTS) $(gf_log_LDADD) $(LIBS)
+gf_mult$(EXEEXT): $(gf_mult_OBJECTS) $(gf_mult_DEPENDENCIES) 
+	@rm -f gf_mult$(EXEEXT)
+	$(LINK) $(gf_mult_OBJECTS) $(gf_mult_LDADD) $(LIBS)
+gf_xor$(EXEEXT): $(gf_xor_OBJECTS) $(gf_xor_DEPENDENCIES) 
+	@rm -f gf_xor$(EXEEXT)
+	$(LINK) $(gf_xor_OBJECTS) $(gf_xor_LDADD) $(LIBS)
+gf_xor_tester$(EXEEXT): $(gf_xor_tester_OBJECTS) $(gf_xor_tester_DEPENDENCIES) 
+	@rm -f gf_xor_tester$(EXEEXT)
+	$(LINK) $(gf_xor_tester_OBJECTS) $(gf_xor_tester_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -326,6 +415,14 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/galois.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_basic_tester.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_div.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_ilog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_inverse.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_log.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_mult.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_xor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gf_xor_tester.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -549,7 +646,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
 installdirs: installdirs-recursive
 installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)"; do \
@@ -583,7 +680,7 @@ maintainer-clean-generic:
 clean: clean-recursive
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
-	mostlyclean-am
+	clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -656,8 +753,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags ctags-recursive \
-	distclean distclean-compile distclean-generic \
+	clean-libLTLIBRARIES clean-libtool clean-noinstPROGRAMS ctags \
+	ctags-recursive distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
