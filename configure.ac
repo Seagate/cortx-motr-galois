@@ -24,6 +24,20 @@ if ! test -d $SRCDIR; then
 fi
 AC_SUBST([SRCDIR])
 
+AC_MSG_CHECKING([for linux objects dir])
+AC_ARG_WITH([linux-obj],
+        [AC_HELP_STRING([--with-linux-obj=path],
+                        [set path to Linux objects dir (default=/lib/modules/$(uname -r)/build])],
+        [LINUX_OBJ=$with_linux_obj],
+        [LINUX_OBJ=/lib/modules/$(uname -r)/build]
+)
+
+AC_MSG_RESULT([$LINUX_OBJ])
+AC_SUBST([LINUX_OBJ])
+
+LINUX_MOD=$(dirname $LINUX_OBJ)
+AC_SUBST([LINUX_MOD])
+
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([doc/Makefile])
 AC_CONFIG_FILES([src/Makefile])
