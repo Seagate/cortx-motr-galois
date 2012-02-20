@@ -20,3 +20,5 @@ clean distclean:
 	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=`pwd` clean
 	$(RM) Module.markers modules.order
 	$(RM) ./galois.[ch]
+
+distdir:

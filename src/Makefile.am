@@ -38,3 +38,5 @@ gf_xor_LDADD             = $(top_builddir)/src/libgalois.la
 gf_xor_tester_SOURCES    = gf_xor_tester.c
 gf_xor_tester_INCLUDES   = -I$(top_srcdir) -I$(top_srcdir)/include
 gf_xor_tester_LDADD      = $(top_builddir)/src/libgalois.la
+
+EXTRA_DIST               = linux_kernel/Makefile.in
