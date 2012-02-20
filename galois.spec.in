@@ -35,7 +35,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %defattr(-,root,root)
 %doc AUTHORS README NEWS ChangeLog COPYING INSTALL
 %{_libdir}/libgalois*.so*
-/lib/modules
+/lib/modules/*
+
+%post
+/sbin/depmod -a
 
 %files devel
 %defattr(-,root,root,-)
