@@ -46,3 +46,4 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_includedir}/*
 %{_libdir}/libgalois*.a
 %{_libdir}/libgalois*.la
+%{_datadir}/*
