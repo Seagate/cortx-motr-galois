@@ -3,6 +3,9 @@ SUBDIRS                  = linux_kernel
 lib_LTLIBRARIES          = libgalois.la
 noinst_PROGRAMS          = gf_basic_tester gf_div gf_ilog gf_inverse gf_log gf_mult gf_xor gf_xor_tester
 
+symversdir               = $(datadir)/galois/symvers
+symvers_DATA             = linux_kernel/Module.symvers
+
 INCLUDES                 = -I$(top_srcdir) -I$(top_srcdir)/include
 
 libgalois_la_SOURCES     = galois.c
