@@ -28,7 +28,8 @@ plank@cs.utk.edu
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "galois.h"
+#include <unistd.h>
+#include <galois/galois.h>
 #include <sys/time.h>
 
 #define BUFSIZE (50000)

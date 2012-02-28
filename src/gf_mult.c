@@ -1,4 +1,4 @@
-/* gf_div.c
+/* gf_mult.c
  * James S. Plank
 
 Galois.tar - Fast Galois Field Arithmetic Library in C/C++
@@ -27,15 +27,16 @@ plank@cs.utk.edu
  */
 
 #include <stdio.h>
-#include "galois.h"
-
+#include <stdlib.h>
+#include <unistd.h>
+#include <galois/galois.h>
 
 main(int argc, char **argv)
 {
   unsigned int x, y, w;
 
   if (argc != 4) {
-    fprintf(stderr, "usage: galois_div x y w - does division in GF(2^w)\n");
+    fprintf(stderr, "usage: galois_mult x y w - does multiplication in GF(2^w)\n");
     exit(1);
   }
 
@@ -48,6 +49,7 @@ main(int argc, char **argv)
   if (w < 32 && x >= (1 << w)) { fprintf(stderr, "x must be in [0,%d]\n", (1 << w)-1); exit(1); }
   if (w < 32 && y >= (1 << w)) { fprintf(stderr, "y must be in [0,%d]\n", (1 << w)-1); exit(1); }
 
-  printf("%u\n", galois_single_divide(x, y, w));
+  printf("%u\n", galois_single_multiply(x, y, w));
   exit(0);
 }
+

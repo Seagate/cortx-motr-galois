@@ -1,0 +1,24 @@
+obj-m += galois.o
+
+EXTRA_CFLAGS = -I@SRCDIR@/include
+
+CURRENT = $(shell uname -r)
+DEST = /lib/modules/$(CURRENT)/kernel/fs/galois/galois.ko
+
+all:
+	$(RM) ./galois.[ch]
+	ln -s ../galois.c ./galois.c
+	make -C /lib/modules/$(CURRENT)/build M=$(PWD) modules
+    
+install modules_install:
+	$(MAKE) INSTALL_MOD_DIR=kernel/fs/galois -C /lib/modules/$(CURRENT)/build M=`pwd` modules_install
+
+uninstall:
+	su -c "rm -fr $(DEST) && /sbin/depmod -a"
+
+clean distclean:
+	$(MAKE) -C /lib/modules/$(CURRENT)/build M=`pwd` clean
+	$(RM) Module.markers modules.order
+	$(RM) ./galois.[ch]
+
+distdir:

@@ -1,4 +1,4 @@
-/* gf_inverse.c
+/* gf_div.c
  * James S. Plank
 
 Galois.tar - Fast Galois Field Arithmetic Library in C/C++
@@ -27,31 +27,28 @@ plank@cs.utk.edu
  */
 
 #include <stdio.h>
-#include "galois.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <galois/galois.h>
 
 main(int argc, char **argv)
 {
-  unsigned int x, w;
+  unsigned int x, y, w;
 
-  if (argc != 3) {
-    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
+  if (argc != 4) {
+    fprintf(stderr, "usage: galois_div x y w - does division in GF(2^w)\n");
     exit(1);
   }
 
-  if (sscanf(argv[1], "%u", &x) != 1) {
-    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
-    exit(1);
-  }
-
-  if (sscanf(argv[2], "%u", &w) != 1) {
-    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
-    exit(1);
-  }
+  sscanf(argv[1], "%u", &x);
+  sscanf(argv[2], "%u", &y);
+  w = atoi(argv[3]);
 
   if (w < 1 || w > 32) { fprintf(stderr, "Bad w\n"); exit(1); }
 
   if (w < 32 && x >= (1 << w)) { fprintf(stderr, "x must be in [0,%d]\n", (1 << w)-1); exit(1); }
+  if (w < 32 && y >= (1 << w)) { fprintf(stderr, "y must be in [0,%d]\n", (1 << w)-1); exit(1); }
 
-  printf("%u\n", galois_inverse(x, w));
+  printf("%u\n", galois_single_divide(x, y, w));
   exit(0);
 }

@@ -1,4 +1,4 @@
-/* gf_ilog.c
+/* gf_inverse.c
  * James S. Plank
 
 Galois.tar - Fast Galois Field Arithmetic Library in C/C++
@@ -27,24 +27,33 @@ plank@cs.utk.edu
  */
 
 #include <stdio.h>
-#include "galois.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <galois/galois.h>
 
 main(int argc, char **argv)
 {
   unsigned int x, w;
 
   if (argc != 3) {
-    fprintf(stderr, "usage: gf_ilog x w - returns the discrete inverse log if x in GF(2^w)\n");
+    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
     exit(1);
   }
 
-  sscanf(argv[1], "%u", &x);
-  w = atoi(argv[2]);
+  if (sscanf(argv[1], "%u", &x) != 1) {
+    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
+    exit(1);
+  }
+
+  if (sscanf(argv[2], "%u", &w) != 1) {
+    fprintf(stderr, "usage: gf_inverse x w - returns 1/x in GF(2^w).\n");
+    exit(1);
+  }
 
   if (w < 1 || w > 32) { fprintf(stderr, "Bad w\n"); exit(1); }
 
-  if (w < 32 && x >= (1 << w)-1) { fprintf(stderr, "x must be in [0,%d]\n", (1 << w)-2); exit(1); }
+  if (w < 32 && x >= (1 << w)) { fprintf(stderr, "x must be in [0,%d]\n", (1 << w)-1); exit(1); }
 
-  printf("%u\n", galois_ilog(x, w));
+  printf("%u\n", galois_inverse(x, w));
   exit(0);
 }
