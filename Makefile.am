@@ -41,8 +41,7 @@ KDIR                = @LINUX_OBJ@
 GALOIS_KMOD_DIR     = src/linux_kernel
 GALOIS_ABS_KMOD_DIR = $(abs_top_builddir)/$(GALOIS_KMOD_DIR)
 
-EXTRA_DIST          = galois.spec.in \
-                      m4/.gitignore \
+EXTRA_DIST          = m4/.gitignore \
                       $(GALOIS_KMOD_DIR)/Kbuild.in
 
 #symversdir         = $(datadir)/galois/symvers

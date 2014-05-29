@@ -102,6 +102,5 @@ AC_CHECK_FUNCS([gettimeofday])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/linux_kernel/Kbuild])
-AC_CONFIG_FILES([galois.spec])
 
 AC_OUTPUT

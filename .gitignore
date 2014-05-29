@@ -55,7 +55,6 @@ GTAGS
 /Makefile.in
 /aclocal.m4
 /autom4te.cache/
-/mero.spec
 /compile
 /config.*
 /config/
@@ -67,7 +66,6 @@ GTAGS
 /lustre_config.h
 /missing
 /stamp-h1
-/*.spec
 
 # m4 macros
 /m4/libtool.m4
