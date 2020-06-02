@@ -120,5 +120,5 @@ clean-kernel-modules:
 	$(MAKE) -C $(KDIR) M="$(GALOIS_ABS_KMOD_DIR)" $(AM_MAKEFLAGS) clean
 
 install-exec-local:
-	@$(MAKE) INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=kernel/fs/mero \
+	@$(MAKE) INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=kernel/fs/motr \
 			 -C $(KDIR) M="$(GALOIS_ABS_KMOD_DIR)" modules_install
