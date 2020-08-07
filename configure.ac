@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([galois], [0.1], [mero@xyratex.com])
+AC_INIT([galois], [0.1], [motr@xyratex.com])
 
 # refer to the "7.4 Nesting Packages" section of autoconf manual for
 # explanation on why this directive is used
