@@ -1,8 +1,6 @@
 /* Galois.c
  * James S. Plank
  * April, 2007
- * And
- * Seagate Technology LLC and/or its Affiliates
 
 Galois.tar - Fast Galois Field Arithmetic Library in C/C++
 Copright (C) 2007 James S. Plank
@@ -26,11 +24,6 @@ Department of Computer Science
 University of Tennessee
 Knoxville, TN 37996
 plank@cs.utk.edu
-
-And
-
-Seagate Technology LLC and/or its Affiliates
-opensource@seagate.com or cortx-questions@seagate.com
 
  */
 #ifdef __KERNEL__
