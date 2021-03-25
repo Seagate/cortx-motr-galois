@@ -37,6 +37,7 @@ plank@cs.utk.edu
 # define free(m) kfree(m)
 # define fprintf(m, fmt, args...) printk("%s:%d " fmt, __FUNCTION__, __LINE__, ##args)
 # define GALOIS_EXPORTED(s) EXPORT_SYMBOL(s)
+MODULE_LICENSE("LGPL v2.1");
 #else /* !__KERNEL__ */
 # include <stdio.h>
 # include <stdlib.h>
