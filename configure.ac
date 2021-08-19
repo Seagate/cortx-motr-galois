@@ -48,6 +48,14 @@ AC_ARG_ENABLE([tests],
 AM_CONDITIONAL([ENABLE_TESTS],
                [test "x$enable_tests" = xyes])
 
+AC_ARG_ENABLE([kernel],
+        [AS_HELP_STRING([--enable-kernel], [enable kernel])],
+        [], [enable_kernel=no]
+)
+
+AM_CONDITIONAL([ENABLE_KERNEL],
+               [test "x$enable_kernel" = xyes])
+
 AC_ARG_WITH([linux],
         [AS_HELP_STRING([--with-linux=path],
                         [set path to Linux kernel dir, default is /lib/modules/`uname -r`/build])],

@@ -104,6 +104,7 @@ endif
 #                                 Build rules
 ################################################################################
 
+if ENABLE_KERNEL
 all-local: build-kernel-modules
 
 .PHONY: build-kernel-modules
@@ -122,3 +123,4 @@ clean-kernel-modules:
 install-exec-local:
 	@$(MAKE) INSTALL_MOD_PATH=$(DESTDIR) INSTALL_MOD_DIR=kernel/fs/motr \
 			 -C $(KDIR) M="$(GALOIS_ABS_KMOD_DIR)" modules_install
+endif
